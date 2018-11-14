@@ -209,7 +209,13 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="App_Plugins\MBran.OpenGraph\package.manifest" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_Plugins\MBran.OpenGraph\opengraph.css" />
+    <Content Include="App_Plugins\MBran.OpenGraph\opengraph.html" />
+    <Content Include="App_Plugins\MBran.OpenGraph\opengraph.controller.js" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\AutoMapper.3.3.1\tools\AutoMapper.targets" Condition="Exists('..\packages\AutoMapper.3.3.1\tools\AutoMapper.targets')" />
