@@ -29,8 +29,6 @@
                     $scope.thumbnail.src = ent.metaData.umbracoFile.Value.src;
                     $scope.thumbnail.width = ent.metaData.umbracoWidth.Value;
                     $scope.thumbnail.height = ent.metaData.umbracoHeight.Value;
-                    console.log(ent);
-                    console.log($scope.thumbnail);
                 });
             }
         }

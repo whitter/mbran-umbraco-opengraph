@@ -11,18 +11,12 @@
                                     width="{{thumbnail.width}}"
                                     height="{{thumbnail.height}}"
                                     src="thumbnail.src"			
-                                    max-size="100"	
+                                    max-size="120"	
                                 />
-                                <span class="umb-icon-holder" style="display: none;">
-                                    <i class="icon icon-picture large"></i>
-                                    <small class="ng-binding">Capture1.PNG</small>
-                                </span>
-                                <div class="umb-sortable-thumbnails__actions">
-                                    <a class="umb-sortable-thumbnails__action" href="" ng-click="removeImage()">
-                                        <i class="icon icon-delete red"></i>
-                                        <localize key="general_delete" class="ng-isolate-scope ng-scope">Remove</localize>
-                                    </a>
-                                </div>
+                                <a class="umb-sortable-thumbnails__action" href="" ng-click="removeImage()">
+                                    <i class="icon icon-delete red"></i>
+                                    <localize key="general_delete" class="ng-isolate-scope ng-scope">Remove</localize>
+                                </a>
                             </div>
                             <a href="#" class="add-link ng-scope add-link-square" ng-show="thumbnail.src == ''" ng-click="pickImage()" prevent-default="">
                                 <i class="icon icon-add large"></i>
