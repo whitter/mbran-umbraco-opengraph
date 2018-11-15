@@ -43,14 +43,17 @@
                 "book": "Book",
                 "profile": "Profile",
                 "website": "Website",
+                "blog": "Blog",
+                "game": "Game",
+                "movie": "Movie",
+                "food": "Food",
+                "city": "City",
+                "country": "Country",
+                "company": "Company",
+                "hotel": "Hotel",
+                "restaurant": "Restaurant",
             };
-
-            $scope.opengraph.metadata = {
-                "article:published_time": "test",
-                "book:author": "test2",
-                "profile:username": "test3",
-            };
-
+            
             $scope.metadata = {
                 key: '',
                 value: ''
