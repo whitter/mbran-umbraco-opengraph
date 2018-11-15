@@ -1,23 +1,17 @@
 ﻿angular.module('umbraco')
     .controller('MBran.OpenGraph.OpenGraphController', function ($scope, $element, assetsService, dialogService, entityResource) {
+        
 
         function init() {
-
-            initOptions();
-            initModel();
-            initControls();
-        }
-
-        init();
-
-        function initOptions() {
             $scope.model.hideLabel = true;
-        }
-
-        function initModel() {
+            initOpenGraphModels();
 
             if (!$scope.model.value) {
                 $scope.model.value = {};
+            }
+
+            if (!$scope.model.value.metadata) {
+                $scope.model.value.metadata = {};
             }
 
             if (!$scope.model.value.image) {
@@ -31,8 +25,37 @@
                     $scope.thumbnail.height = ent.metaData.umbracoHeight.Value;
                 });
             }
+
         }
 
+        function initOpenGraphModels() {
+            $scope.opengraph = {};
+            $scope.opengraph.types = {
+                "music.song": "Music: Song",
+                "music.album": "Music: Album",
+                "music.playlist": "Music: Playlist",
+                "music.radio_station": "Music: Radio Station",
+                "video.movie": "Video: Movie",
+                "video.episode": "Video: Episode",
+                "video.tv_show": "Video: Tv Show",
+                "video.other": "Video: Other",
+                "article": "Article",
+                "book": "Book",
+                "profile": "Profile",
+                "website": "Website",
+            };
+
+            $scope.opengraph.metadata = {
+                "article:published_time": "test",
+                "book:author": "test2",
+                "profile:username": "test3",
+            };
+
+            $scope.metadata = {
+                key: '',
+                value: ''
+            };
+        }
         function initThumbnailModel() {
             $scope.thumbnail = {};
             $scope.thumbnail.src = '';
@@ -40,22 +63,9 @@
             $scope.thumbnail.height = 0;
         }
 
-        function initControls() {
-            assetsService
-                .loadJs("~/Umbraco/lib/slider/js/bootstrap-slider.js")
-                .then(function () {
-
-                   
-
-                });
-
-            assetsService.loadCss("~/Umbraco/lib/slider/bootstrap-slider.css");
-            assetsService.loadCss("~/Umbraco/lib/slider/bootstrap-slider-custom.css");
-        }
-
         $scope.pickImage = function () {
             dialogService.mediaPicker({
-                multiPicker: false, 
+                multiPicker: false,
                 callback: function (data) {
                     $scope.model.value.image = data.id;
                     $scope.thumbnail.src = data.thumbnail;
@@ -68,5 +78,16 @@
         $scope.removeImage = function () {
             $scope.thumbnail.src = '';
             $scope.model.value.image = '';
-        };	
-});
+        };
+
+        $scope.removeMetadata = function(key) {
+            delete $scope.model.value.metadata[key];
+        }
+
+        $scope.addMetadata = function() {
+            $scope.model.value.metadata[$scope.metadata.key] = $scope.metadata.value;
+            $scope.metadata.key = '';
+            $scope.metadata.value = '';
+        }
+        init();
+    });
