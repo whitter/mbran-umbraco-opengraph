@@ -3,3 +3,12 @@
 @{
 	Layout = null;
 }
+
+<div>
+    @foreach (var item in Model.Content.OpenGraph)
+    {
+        <div>
+            @item.Metadata: @item.Value
+        </div>
+    }
+</div>
