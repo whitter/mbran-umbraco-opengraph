@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using MBran.OpenGraph.Models;
@@ -15,57 +13,65 @@ namespace MBran.OpenGraph.Extensions
     public static class HtmlHelperExtensions
     {
         public static MvcHtmlString OpenGraph(this HtmlHelper helper,
-            IDictionary<string,string> defaultMetadata = null)
+            IEnumerable<OpenGraphMetaData> defaultMetadata = null)
         {
-
             var curPage = GetCurrentPage();
             var cacheName = string.Join("_", nameof(HtmlHelperExtensions), nameof(OpenGraph),
                 curPage.DocumentTypeAlias);
 
-            var propertyName = (string)ApplicationContext.Current
+            var currentCachedPropertyName = (string) ApplicationContext.Current
                 .ApplicationCache
                 .RuntimeCache
-                .GetCacheItem(cacheName, () => GetPropertyName(curPage));
+                .GetCacheItem(cacheName);
 
-            //if cache exist but property has changed
-            if (string.IsNullOrWhiteSpace(propertyName) || curPage.HasProperty(propertyName))
-                return helper.OpenGraph(curPage, propertyName, defaultMetadata);
+            //clear if there is previous cache but property is gone
+            if (!string.IsNullOrWhiteSpace(currentCachedPropertyName) &&
+                !curPage.HasProperty(currentCachedPropertyName))
+                ApplicationContext.Current
+                    .ApplicationCache
+                    .RuntimeCache
+                    .ClearCacheItem(cacheName);
 
-            ApplicationContext.Current
-                .ApplicationCache
-                .RuntimeCache
-                .ClearCacheItem(cacheName);
+            //retry if no cache available or if previous cached property does not exist
+            if (string.IsNullOrWhiteSpace(currentCachedPropertyName)
+                || !curPage.HasProperty(currentCachedPropertyName))
+                currentCachedPropertyName = (string) ApplicationContext.Current
+                    .ApplicationCache
+                    .RuntimeCache
+                    .GetCacheItem(cacheName, () => GetPropertyName(curPage));
 
-            propertyName = (string)ApplicationContext.Current
-                .ApplicationCache
-                .RuntimeCache
-                .GetCacheItem(cacheName, () => GetPropertyName(curPage));
-
-            return helper.OpenGraph(curPage, propertyName, defaultMetadata);
-
+            return helper.OpenGraph(curPage, currentCachedPropertyName, defaultMetadata);
         }
 
         public static MvcHtmlString OpenGraph(this HtmlHelper helper, string propertyName,
-            IDictionary<string, string> defaultMetadata = null)
+            IEnumerable<OpenGraphMetaData> defaultMetadata = null)
         {
             var curPage = GetCurrentPage();
             return helper.OpenGraph(curPage, propertyName, defaultMetadata);
         }
 
-        private static MvcHtmlString OpenGraph(this HtmlHelper helper, 
+        private static MvcHtmlString OpenGraph(this HtmlHelper helper,
             IPublishedContent content,
             string propertyName,
-            IDictionary<string, string> defaultMetadata = null)
+            IEnumerable<OpenGraphMetaData> defaultMetadata = null)
         {
-            var metaData = !string.IsNullOrWhiteSpace(propertyName) && content.HasProperty(propertyName) 
+            var metaData = !string.IsNullOrWhiteSpace(propertyName) && content.HasProperty(propertyName)
                 ? content.GetPropertyValue<List<OpenGraphMetaData>>(propertyName)
                 : new List<OpenGraphMetaData>();
+
+            var defaultMeta = defaultMetadata?
+                .Where(d => !metaData.Any(m =>
+                    m.Metadata.Equals(d.Metadata, StringComparison.InvariantCultureIgnoreCase)))
+                .ToList();
+
+            if (defaultMeta != null) metaData.AddRange(defaultMeta);
 
             var htmlString = metaData
                 .Select(m => $@"<meta property=""{m.Metadata}"" content=""{HttpUtility.HtmlEncode(m.Value)}"">")
                 .ToList();
 
-            return MvcHtmlString.Create(string.Join(string.Empty,htmlString));
+
+            return MvcHtmlString.Create(string.Join(string.Empty, htmlString));
         }
 
         private static string GetPropertyName(IPublishedContent content)
