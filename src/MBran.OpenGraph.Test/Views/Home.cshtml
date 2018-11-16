@@ -1,14 +1,10 @@
 ﻿@inherits Umbraco.Web.Mvc.UmbracoTemplatePage<ContentModels.Home>
+@using MBran.OpenGraph.Extensions
 @using ContentModels = Umbraco.Web.PublishedContentModels;
 @{
-	Layout = null;
+    Layout = null;
 }
 
 <div>
-    @foreach (var item in Model.Content.OpenGraph)
-    {
-        <div>
-            @item.Metadata: @item.Value
-        </div>
-    }
+    @Html.OpenGraph()
 </div>
