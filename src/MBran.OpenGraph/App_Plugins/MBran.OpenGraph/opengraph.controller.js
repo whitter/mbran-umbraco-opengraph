@@ -11,7 +11,7 @@
             }
 
             if (!$scope.model.value.metadata) {
-                $scope.model.value.metadata = {};
+                $scope.model.value.metadata = [];
             }
 
             if (!$scope.model.value.image) {
@@ -83,12 +83,17 @@
             $scope.model.value.image = '';
         };
 
-        $scope.removeMetadata = function(key) {
-            delete $scope.model.value.metadata[key];
+        $scope.removeMetadata = function(index) {
+            delete $scope.model.value.metadata[index];
+            $scope.model.value.metadata = $scope.model.value.metadata.filter(Boolean);
+
         }
 
         $scope.addMetadata = function() {
-            $scope.model.value.metadata[$scope.metadata.key] = $scope.metadata.value;
+            $scope.model.value.metadata.push({
+                "metadata": $scope.metadata.key,
+                "value": $scope.metadata.value
+            });
             $scope.metadata.key = '';
             $scope.metadata.value = '';
         }
