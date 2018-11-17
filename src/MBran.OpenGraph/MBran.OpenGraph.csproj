@@ -207,6 +207,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Extensions\HtmlHelperExtensions.cs" />
+    <Compile Include="Extensions\OpenGraphExtensions.cs" />
     <Compile Include="Models\OpenGraph.cs" />
     <Compile Include="Models\OpenGraphMetaData.cs" />
     <Compile Include="OpenGraphValueConverter.cs" />

@@ -13,6 +13,19 @@ namespace MBran.OpenGraph.Extensions
     public static class HtmlHelperExtensions
     {
         public static MvcHtmlString OpenGraph(this HtmlHelper helper,
+            Models.OpenGraph opengraph)
+        {
+            return helper.OpenGraph(opengraph.ToList());
+        }
+
+        public static MvcHtmlString OpenGraph(this HtmlHelper helper, string propertyName,
+            Models.OpenGraph opengraph)
+        {
+            var curPage = GetCurrentPage();
+            return helper.OpenGraph(curPage, propertyName, opengraph.ToList());
+        }
+
+        public static MvcHtmlString OpenGraph(this HtmlHelper helper,
             IEnumerable<OpenGraphMetaData> defaultMetadata = null)
         {
             var curPage = GetCurrentPage();
