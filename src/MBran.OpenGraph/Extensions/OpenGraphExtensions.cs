@@ -24,7 +24,7 @@ namespace MBran.OpenGraph.Extensions
                         .TrimEnd('/');
                     model.Add(new OpenGraphMetaData
                     {
-                        Metadata = "og:image",
+                        Key = "og:image",
                         Value = url + mediaUrl
                     });
                 }
@@ -33,19 +33,19 @@ namespace MBran.OpenGraph.Extensions
             if (!string.IsNullOrWhiteSpace(opengraph.Title))
                 model.Add(new OpenGraphMetaData
                 {
-                    Metadata = "og:title",
+                    Key = "og:title",
                     Value = opengraph.Title
                 });
             if (!string.IsNullOrWhiteSpace(opengraph.Type))
                 model.Add(new OpenGraphMetaData
                 {
-                    Metadata = "og:type",
+                    Key = "og:type",
                     Value = opengraph.Type
                 });
             if (!string.IsNullOrWhiteSpace(opengraph.Description))
                 model.Add(new OpenGraphMetaData
                 {
-                    Metadata = "og:description",
+                    Key = "og:description",
                     Value = opengraph.Description
                 });
 

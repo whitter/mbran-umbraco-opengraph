@@ -91,7 +91,7 @@
 
         $scope.addMetadata = function() {
             $scope.model.value.metadata.push({
-                "metadata": $scope.metadata.key,
+                "key": $scope.metadata.key,
                 "value": $scope.metadata.value
             });
             $scope.metadata.key = '';

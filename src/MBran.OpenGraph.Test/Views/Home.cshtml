@@ -1,23 +1,32 @@
 ﻿@inherits Umbraco.Web.Mvc.UmbracoTemplatePage<ContentModels.Home>
+@using System.Dynamic
 @using MBran.OpenGraph.Extensions
 @using MBran.OpenGraph.Models
+@using umbraco.editorControls
 @using ContentModels = Umbraco.Web.PublishedContentModels;
 @{
     Layout = null;
 }
 
 <div>
-    @Html.OpenGraph(new OpenGraph
+    @*@Html.OpenGraph(new OpenGraph
+        {
+            ...
+        })
+
+        @Html.OpenGraph("opengraph",new OpenGraph
+        {
+
+        })*@
+
+    @*@Html.OpenGraph(new []
+        {
+            new { key = "test", value="val1" }
+        })*@
+
+    @Html.OpenGraph(new List<OpenGraphMetaData>
     {
-        Title = "Test default",
-        Description = "This is the description",
-        ImageId = null,
-        Metadata = new List<OpenGraphMetaData> {
-            new OpenGraphMetaData
-            {
-                Metadata = "og:gg",
-                Value = "good game"
-            }
-        }
+        new OpenGraphMetaData{ Key = "mewo", Value = "arf"}
     })
+
 </div>
