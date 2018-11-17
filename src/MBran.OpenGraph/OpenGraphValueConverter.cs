@@ -34,10 +34,28 @@ namespace MBran.OpenGraph
         public object ConvertSourceToObject(PublishedPropertyType propertyType, object source, bool preview)
         {
             var opengraph = JsonConvert.DeserializeObject<Models.OpenGraph>(source as string);
-            var media = _umbHelper.Media(opengraph.ImageId);
-            var mediaUrl = media.Url;
-
             var model = new List<OpenGraphMetaData>();
+
+            if (opengraph == null) return model;
+
+            if (opengraph.ImageId != null)
+            {
+                var media = _umbHelper.Media(opengraph.ImageId);
+                var mediaUrl = media.Url;
+                if (!string.IsNullOrEmpty(mediaUrl))
+                {
+                    var url = UmbracoContext.Current
+                        .HttpContext.Request.Url?.AbsoluteUri
+                        .TrimEnd('/');
+                    model.Add(new OpenGraphMetaData
+                    {
+                        Metadata = "og:image",
+                        Value = url + mediaUrl
+
+                    });
+                }
+            }
+
             if (!string.IsNullOrWhiteSpace(opengraph.Title))
                 model.Add(new OpenGraphMetaData
                     {
@@ -59,18 +77,6 @@ namespace MBran.OpenGraph
                     Value = opengraph.Description
 
                 });
-            if (!string.IsNullOrEmpty(mediaUrl))
-            {
-                var url = UmbracoContext.Current
-                    .HttpContext.Request.Url?.AbsoluteUri
-                    .TrimEnd('/');
-                model.Add(new OpenGraphMetaData
-                {
-                    Metadata = "og:image",
-                    Value = url + mediaUrl
-
-                });
-            }
             
             model.AddRange(opengraph.Metadata);
             return model;
