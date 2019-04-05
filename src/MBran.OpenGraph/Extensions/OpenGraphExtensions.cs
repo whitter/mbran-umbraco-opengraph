@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using MBran.OpenGraph.Models;
 using Umbraco.Web;
 
@@ -20,7 +21,7 @@ namespace MBran.OpenGraph.Extensions
                 if (!string.IsNullOrEmpty(mediaUrl))
                 {
                     var url = UmbracoContext.Current
-                        .HttpContext.Request.Url?.AbsoluteUri
+                        .HttpContext.Request.Url?.GetLeftPart(UriPartial.Authority)
                         .TrimEnd('/');
                     model.Add(new OpenGraphMetaData
                     {
